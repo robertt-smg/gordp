@@ -86,6 +86,11 @@ func (t *TPKT) recvChallenge(data []byte) error {
 	pubkey, err := t.Conn.TlsPubKey()
 	glog.Debugf("pubkey=%+v", pubkey)
 
+	if len(tsreq.NegoTokens) == 0 {
+		glog.Error("No ntlmSec Data found - please anbale NTLM, only NTLM auth supported")
+		return fmt.Errorf("No ntlmSec Data found - please anbale NTLM, only NTLM auth supported")
+	}
+
 	authMsg, ntlmSec := t.ntlm.GetAuthenticateMessage(tsreq.NegoTokens[0].Data)
 	t.ntlmSec = ntlmSec
 
